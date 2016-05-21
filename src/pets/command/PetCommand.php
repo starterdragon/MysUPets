@@ -20,10 +20,16 @@ class PetCommand extends PluginCommand {
 	public function execute(CommandSender $sender, $currentAlias, array $args) {
 	
 		if (!isset($args[0])) {
-			$this->main->togglePet($sender);
+			$sender->sendMessage("Please use /pet help");
 			return true;
 		}
 		switch (strtolower($args[0])){
+			case "toggle":
+				if ($sender->hasPermission('pet.command')){
+				$this->main->togglePet($sender);
+				}
+				return true;
+			break;
 			case "name":
 			case "setname":
 				if (isset($args[1])){
@@ -32,6 +38,33 @@ class PetCommand extends PluginCommand {
 					$this->main->getPet($sender->getName())->setNameTag($name);
 					$sender->sendMessage("Set Name to ".$name);
 				}
+				return true;
+			break;
+			case "help":
+				if($sender->hasPermission('pet.command.help')){
+				$sender->sendMessage("§e======PetHelp======");
+				$sender->sendMessage("§b/pets toggle - on/off your Pet");
+				$sender->sendMessage("§b/pets type [type]");
+				$sender->sendMessage("§b/pets name [petname]");
+				$sender->sendMessage("§b/pets list");
+				return true;
+				}else{
+				$sender->sendMessage("You do not have permission to use this command");
+					    }
+				return true;
+			break;
+			case "list":
+				if($sender->hasPermission('pet.command.list')){
+				$sender->sendMessage("§e======Pet List======");
+				$sender->sendMessage("§e§ldog");
+				$sender->sendMessage("§e§lblaze");
+				$sender->sendMessage("§e§lpig");
+				$sender->sendMessage("§e§lchicken");
+				$sender->sendMessage("§e§lrabbit");
+				$sender->sendMessage("§e§lmagma");
+				return true;
+				}else{$sender->sendMessage(TextFormat::RED."You do not have permission to use this command");
+					    }
 				return true;
 			break;
 			case "type":
